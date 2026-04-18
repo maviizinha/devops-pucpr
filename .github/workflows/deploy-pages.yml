@@ -1,56 +1,83 @@
-﻿name: Deploy Pages
+name: CD - GitHub Pages
 
 on:
-push:
-branches:
-- main
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 permissions:
-contents: read
-pages: write
-id-token: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-group: pages
-cancel-in-progress: true
+  group: pages
+  cancel-in-progress: true
 
 jobs:
-build:
-runs-on: ubuntu-latest
+  preview-check:
+    name: Verificação de deploy na PR
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Baixar cÃ³digo
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Configurar Node
-    uses: actions/setup-node@v4
-    with:
-      node-version: 20
-      cache: npm
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-  - name: Instalar dependÃªncias
-    run: npm ci
+      - name: Instalar dependências
+        run: npm ci
 
-  - name: Gerar build
-    run: npm run build
+      - name: Gerar build
+        run: npm run build
 
-  - name: Configurar Pages
-    uses: actions/configure-pages@v5
+  build:
+    name: Build para Pages
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
 
-  - name: Enviar artefato
-    uses: actions/upload-pages-artifact@v3
-    with:
-      path: dist
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-deploy:
-needs: build
-runs-on: ubuntu-latest
-environment:
-name: github-pages
-url: ${{ steps.deployment.outputs.page_url }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-steps:
-  - name: Publicar no GitHub Pages
-    id: deployment
-    uses: actions/deploy-pages@v4
+      - name: Instalar dependências
+        run: npm ci
 
+      - name: Gerar build
+        run: npm run build
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar artefato
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy no GitHub Pages
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
