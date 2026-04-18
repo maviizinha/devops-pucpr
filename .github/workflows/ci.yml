@@ -8,6 +8,10 @@ on:
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   test:
@@ -27,7 +31,7 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      - name: Rodar testes
+      - name: Rodar testes unitários
         run: npm test
 
       - name: Gerar build
