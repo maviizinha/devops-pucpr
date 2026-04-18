@@ -1,18 +1,7 @@
-﻿# FocusFlow
+﻿## CI/CD
 
-Projeto simples para a disciplina de DevOps.
+Este projeto utiliza GitHub Actions para:
 
-## O que faz
-- timer pomodoro
-- lista de tarefas
-- persistência no navegador com localStorage
-- testes automatizados
-- CI com GitHub Actions
-- deploy no GitHub Pages
-
-## Como rodar
-```bash
-npm install
-npm test
-npm run build
+- CI: instalar dependências, rodar testes e gerar build automaticamente
+- CD: publicar a aplicação no GitHub Pages após merge na branch main
 
