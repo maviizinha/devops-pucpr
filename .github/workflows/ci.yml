@@ -1,0 +1,32 @@
+﻿name: CI
+
+on:
+push:
+branches:
+- main
+- feature/**
+pull_request:
+
+jobs:
+test:
+runs-on: ubuntu-latest
+
+steps:
+  - name: Baixar cÃ³digo
+    uses: actions/checkout@v4
+
+  - name: Configurar Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+      cache: npm
+
+  - name: Instalar dependÃªncias
+    run: npm ci
+
+  - name: Rodar testes
+    run: npm test
+
+  - name: Gerar build
+    run: npm run build
+
