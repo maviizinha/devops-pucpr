@@ -1,167 +1,198 @@
-﻿
-<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>FocusFlow</title> <link rel="stylesheet" href="styles.css" /> </head> <body> <main class="container"> <section class="card hero"> <p class="eyebrow">Projeto DevOps</p> <h1>FocusFlow</h1> <p class="subtitle">Pomodoro simples com tarefas e progresso salvo no navegador.</p> </section>
-<section class="card timer-card">
-  <h2 id="modeLabel">Modo: Foco</h2>
-  <div id="timer" class="timer">25:00</div>
-
-  <div class="actions">
-    <button id="startBtn">Iniciar</button>
-    <button id="pauseBtn">Pausar</button>
-    <button id="resetBtn">Resetar</button>
-    <button id="switchBtn">Trocar modo</button>
-  </div>
-
-  <p class="hint">Foco: 25 min Â· Pausa: 5 min</p>
-</section>
-
-<section class="card tasks-card">
-  <h2>Tarefas</h2>
-  <div class="task-form">
-    <input id="taskInput" type="text" placeholder="Ex.: estudar GitHub Actions" />
-    <button id="addTaskBtn">Adicionar</button>
-  </div>
-  <ul id="taskList" class="task-list"></ul>
-</section>
-</main> <script src="src/core.js"></script> <script src="src/app.js"></script> </body> </html> '@ | Set-Content -Encoding utf8 index.html
-
-@'
-:root {
-color-scheme: dark;
---bg: #0f172a;
---card: #1e293b;
---card-2: #334155;
---text: #e2e8f0;
---muted: #94a3b8;
---accent: #38bdf8;
---danger: #ef4444;
+﻿:root {
+  color-scheme: dark;
+  --bg: #071a12;
+  --bg-soft: #0b2419;
+  --card: #102b1f;
+  --card-2: #163627;
+  --border: rgba(120, 255, 180, 0.12);
+  --text: #f8fffb;
+  --muted: #b7d3c4;
+  --accent: #2ecc71;
+  --accent-hover: #29b765;
+  --danger: #e74c3c;
+  --input: #0c2218;
 }
 
-{
-box-sizing: border-box;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
 body {
-margin: 0;
-font-family: Arial, Helvetica, sans-serif;
-background: linear-gradient(180deg, #020617, #0f172a);
-color: var(--text);
+  min-height: 100vh;
 }
 
 .container {
-max-width: 900px;
-margin: 0 auto;
-padding: 32px 16px 64px;
-display: grid;
-gap: 20px;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+  display: grid;
+  gap: 20px;
 }
 
 .card {
-background: rgba(30, 41, 59, 0.95);
-border: 1px solid rgba(148, 163, 184, 0.2);
-border-radius: 18px;
-padding: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
 }
 
 .eyebrow {
-margin: 0 0 8px;
-color: var(--accent);
-font-weight: bold;
-text-transform: uppercase;
-letter-spacing: 0.08em;
-font-size: 12px;
+  margin: 0 0 8px;
+  color: #d9ffea;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
 }
 
-h1, h2, p {
-margin-top: 0;
+h1,
+h2,
+p,
+label,
+li,
+span {
+  color: var(--text);
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
 }
 
 .subtitle,
 .hint {
-color: var(--muted);
+  color: var(--muted);
 }
 
 .timer-card {
-text-align: center;
+  text-align: center;
 }
 
 .timer {
-font-size: 72px;
-font-weight: bold;
-margin: 24px 0;
+  font-size: 72px;
+  font-weight: 700;
+  margin: 24px 0;
+  color: #ffffff;
 }
 
 .actions {
-display: flex;
-gap: 10px;
-flex-wrap: wrap;
-justify-content: center;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 14px;
 }
 
 button {
-background: var(--accent);
-color: #082f49;
-border: none;
-border-radius: 10px;
-padding: 12px 16px;
-font-weight: bold;
-cursor: pointer;
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 .task-form {
-display: flex;
-gap: 10px;
-margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 input {
-flex: 1;
-padding: 12px;
-border-radius: 10px;
-border: 1px solid rgba(148, 163, 184, 0.3);
-background: #0f172a;
-color: var(--text);
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--input);
+  color: var(--text);
+  outline: none;
+}
+
+input::placeholder {
+  color: #9ec1ae;
+}
+
+input:focus {
+  border-color: rgba(46, 204, 113, 0.5);
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.12);
 }
 
 .task-list {
-list-style: none;
-padding: 0;
-margin: 0;
-display: grid;
-gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
 }
 
 .task-item {
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 12px;
-background: var(--card-2);
-border-radius: 12px;
-padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--card-2);
+  border-radius: 14px;
+  padding: 12px;
+  color: var(--text);
 }
 
 .task-left {
-display: flex;
-align-items: center;
-gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .task-done {
-text-decoration: line-through;
-color: var(--muted);
+  text-decoration: line-through;
+  color: var(--muted);
 }
 
 .delete-btn {
-background: var(--danger);
-color: white;
+  background: var(--danger);
+  color: #ffffff;
+}
+
+.delete-btn:hover {
+  background: #cf3e30;
 }
 
 @media (max-width: 600px) {
-.timer {
-font-size: 56px;
-}
+  .timer {
+    font-size: 56px;
+  }
 
-.task-form {
-flex-direction: column;
-}
+  .task-form {
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
 }
