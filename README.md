@@ -5,7 +5,7 @@ Projeto simples para a disciplina de DevOps.
 ## O que faz
 - timer pomodoro
 - lista de tarefas
-- persistÃªncia no navegador com localStorage
+- persistência no navegador com localStorage
 - testes automatizados
 - CI com GitHub Actions
 - deploy no GitHub Pages
